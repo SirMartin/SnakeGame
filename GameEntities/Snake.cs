@@ -28,12 +28,7 @@ namespace SnakeGame.GameEntities
             RestartGame();
             _content = new ContentManager(serviceProvider, "Content");
 
-            BodyParts = new List<BodyPart>
-            {
-                new BodyPart(250, 260),
-                new BodyPart(250, 270),
-                new BodyPart(250, 280)
-            };
+            BodyParts = new List<BodyPart>();
         }
 
         internal void RestartGame()
