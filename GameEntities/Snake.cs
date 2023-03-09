@@ -68,7 +68,7 @@ namespace SnakeGame.GameEntities
             if (Position.X < 0 || Position.Y < 0 || Position.X > GameConstants.WINDOW_WIDTH || Position.Y > GameConstants.WINDOW_HEIGHT)
                 return false;
 
-            // Itself collision.
+            // Itself Collision.
             for (var i = 0; i < BodyParts.Count; i++)
             {
                 if (Position.X == BodyParts[i].Position.X && Position.Y == BodyParts[i].Position.Y)

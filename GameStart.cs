@@ -12,6 +12,8 @@ namespace SnakeGame
 
         private Snake _theSnake;
 
+        private Fruit _theFruit;
+
         public GameStart()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -27,11 +29,13 @@ namespace SnakeGame
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
-            base.Initialize();
+            RandomNumberGenerator.Initialize();
 
             _theSnake = new Snake(Services);
+
+            _theFruit = null;
+
+            base.Initialize();
         }
 
         protected override void LoadContent()
