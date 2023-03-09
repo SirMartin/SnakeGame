@@ -45,7 +45,7 @@ namespace SnakeGame.GameEntities
                 }
             }
 
-            return MoveTypes.None;
+            return MoveTypes.Pause;
         }
 
         private void Move(MoveTypes direction)

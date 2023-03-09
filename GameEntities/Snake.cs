@@ -34,14 +34,14 @@ namespace SnakeGame.GameEntities
         internal void RestartGame()
         {
             Position = new Coordinates(GameConstants.SNAKE_START_POSITION_X, GameConstants.SNAKE_START_POSITION_Y);
-            Direction = MoveTypes.None;
+            Direction = MoveTypes.Pause;
         }
 
         public void Update(KeyboardState keyboard)
         {
             UpdateDirection(keyboard);
 
-            if (Direction != MoveTypes.None)
+            if (Direction != MoveTypes.Pause)
             {
                 // Update body parts.
                 for (int i = BodyParts.Count - 1; i >= 0; i--)
@@ -78,6 +78,11 @@ namespace SnakeGame.GameEntities
             return true;
         }
 
+        public bool IsMoving()
+        {
+            return Direction != MoveTypes.Pause;
+        }
+
         private void UpdateDirection(KeyboardState keyboard)
         {
             if (keyboard.IsKeyDown(Keys.Up))
@@ -102,7 +107,7 @@ namespace SnakeGame.GameEntities
         {
             switch (Direction)
             {
-                case MoveTypes.None:
+                case MoveTypes.Pause:
                     break;
                 case MoveTypes.Up:
                     Position.Y = Position.Y - GameConstants.SNAKE_SIZE;
