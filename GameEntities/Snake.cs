@@ -5,17 +5,17 @@ using Microsoft.Xna.Framework.Input;
 using SnakeGame.Entities;
 using SnakeGame.Enums;
 using System;
-
+using System.Collections.Generic;
 
 namespace SnakeGame.GameEntities
 {
     public class Snake
     {
-        public int Length { get; set; }
-
         public MoveTypes Direction { get; set; }
 
         public Coordinates Position { get; set; }
+
+        public List<BodyPart> BodyParts { get; set; }
 
         public ContentManager Content
         {
@@ -23,9 +23,17 @@ namespace SnakeGame.GameEntities
         }
         ContentManager _content;
 
-        public Snake(IServiceProvider serviceProvider) {
+        public Snake(IServiceProvider serviceProvider)
+        {
             RestartGame();
             _content = new ContentManager(serviceProvider, "Content");
+
+            BodyParts = new List<BodyPart>
+            {
+                new BodyPart(250, 260),
+                new BodyPart(250, 270),
+                new BodyPart(250, 280)
+            };
         }
 
         internal void RestartGame()
@@ -37,6 +45,24 @@ namespace SnakeGame.GameEntities
         public void Update(KeyboardState keyboard)
         {
             UpdateDirection(keyboard);
+
+            if (Direction != MoveTypes.None)
+            {
+                // Update body parts.
+                for (int i = BodyParts.Count - 1; i >= 0; i--)
+                {
+                    Coordinates prevBodyPartCoordinates;
+                    if (i == 0)
+                    {
+                        prevBodyPartCoordinates = Position;
+                    }
+                    else
+                    {
+                        prevBodyPartCoordinates = BodyParts[i - 1].Position;
+                    }
+                    BodyParts[i].Update(prevBodyPartCoordinates);
+                }
+            }
 
             Move();
         }
@@ -98,6 +124,18 @@ namespace SnakeGame.GameEntities
             if (!IsAlive())
                 return;
 
+            DrawHead(graphicsDevice, spriteBatch);
+
+            DrawBody(graphicsDevice, spriteBatch);
+
+            var font = Content.Load<SpriteFont>("Fonts/Arial24");
+            // Show Game Over.
+            var text = $"{Position.X} {Position.Y}";
+            spriteBatch.DrawString(font, text, new Vector2(0, 0), Color.Green);
+        }
+
+        private void DrawHead(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
+        {
             var rect = new Texture2D(graphicsDevice, GameConstants.SNAKE_SIZE, GameConstants.SNAKE_SIZE);
             var data = new Color[GameConstants.SNAKE_SIZE * GameConstants.SNAKE_SIZE];
             for (int i = 0; i < data.Length; ++i) data[i] = Color.Black;
@@ -110,13 +148,15 @@ namespace SnakeGame.GameEntities
             rect.SetData(data);
             var coor = new Vector2(Position.X, Position.Y);
             spriteBatch.Draw(rect, coor, Color.White);
+        }
 
-            var font = Content.Load<SpriteFont>("Fonts/Arial24");
-            // Show Game Over.
-            var text = $"{Position.X} {Position.Y}";
-            spriteBatch.DrawString(font, text, new Vector2(0, 0), Color.Green);
+        private void DrawBody(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
+        {
+            foreach (var item in BodyParts)
+            {
+                item.Draw(graphicsDevice, spriteBatch);
             }
+        }
 
-        
     }
 }
