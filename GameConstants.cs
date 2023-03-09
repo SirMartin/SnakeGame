@@ -6,9 +6,9 @@
 
         public const int FRUIT_LIFESPAN = 100;
 
-        public const int SNAKE_START_POSITION_X = 200;
+        public const int SNAKE_START_POSITION_X = 250;
 
-        public const int SNAKE_START_POSITION_Y = 200;
+        public const int SNAKE_START_POSITION_Y = 250;
 
 
         /// <summary>

@@ -24,9 +24,14 @@ namespace SnakeGame.GameEntities
         ContentManager _content;
 
         public Snake(IServiceProvider serviceProvider) {
+            RestartGame();
+            _content = new ContentManager(serviceProvider, "Content");
+        }
+
+        internal void RestartGame()
+        {
             Position = new Coordinates(GameConstants.SNAKE_START_POSITION_X, GameConstants.SNAKE_START_POSITION_Y);
             Direction = MoveTypes.None;
-            _content = new ContentManager(serviceProvider, "Content");
         }
 
         public void Update(KeyboardState keyboard)
@@ -38,7 +43,7 @@ namespace SnakeGame.GameEntities
 
         public bool IsAlive()
         {
-            int MaxSize = 800;
+            int MaxSize = 500;
             if (Position.X < 0 || Position.Y < 0 || Position.X > MaxSize || Position.Y > MaxSize)
                 return false;
 
@@ -108,9 +113,10 @@ namespace SnakeGame.GameEntities
 
             var font = Content.Load<SpriteFont>("Fonts/Arial24");
             // Show Game Over.
-            var text = $"GAME OVER";
-            spriteBatch.DrawString(font, text, new Vector2(250, 250), Color.Pink);
+            var text = $"{Position.X} {Position.Y}";
+            spriteBatch.DrawString(font, text, new Vector2(0, 0), Color.Green);
             }
 
+        
     }
 }

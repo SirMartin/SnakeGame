@@ -31,7 +31,7 @@ namespace SnakeGame
 
             base.Initialize();
 
-            _theSnake = new Snake();
+            _theSnake = new Snake(Services);
         }
 
         protected override void LoadContent()
@@ -49,7 +49,14 @@ namespace SnakeGame
                 Exit();
 
             if (!_theSnake.IsAlive())
+            {
+                // Check for restart option.
+                if (Keyboard.GetState().IsKeyDown(Keys.R))
+                {
+                    _theSnake.RestartGame();
+                }
                 return;
+            }
 
             // Check if we need to make update or not.
             elapsedTime += gameTime.ElapsedGameTime.Milliseconds;
@@ -79,7 +86,7 @@ namespace SnakeGame
             }
 
             _theSnake.Draw(_graphics.GraphicsDevice, _spriteBatch);
-            
+
             // End the sprite batch.
             _spriteBatch.End();
 
