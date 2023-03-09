@@ -69,9 +69,16 @@ namespace SnakeGame.GameEntities
 
         public bool IsAlive()
         {
-            int MaxSize = 500;
-            if (Position.X < 0 || Position.Y < 0 || Position.X > MaxSize || Position.Y > MaxSize)
+            // Boundaries Collision
+            if (Position.X < 0 || Position.Y < 0 || Position.X > GameConstants.WINDOW_WIDTH || Position.Y > GameConstants.WINDOW_HEIGHT)
                 return false;
+
+            // Itself collision.
+            for (var i = 0; i < BodyParts.Count; i++)
+            {
+                if (Position.X == BodyParts[i].Position.X && Position.Y == BodyParts[i].Position.Y)
+                    return false;
+            }
 
             return true;
         }
