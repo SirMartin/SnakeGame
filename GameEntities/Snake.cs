@@ -6,6 +6,7 @@ using SnakeGame.Entities;
 using SnakeGame.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http.Headers;
 
 namespace SnakeGame.GameEntities
@@ -161,23 +162,25 @@ namespace SnakeGame.GameEntities
 
         internal void Grow()
         {
-            var newPosition = new Coordinates(Position.X, Position.Y);
+            var lastBodyPart = BodyParts.LastOrDefault();
+            var newPositionX = lastBodyPart != null ? lastBodyPart.Position.X : Position.X;
+            var newPositionY = lastBodyPart != null ? lastBodyPart.Position.Y : Position.Y;
             switch (Direction)
             {
                 case MoveTypes.Up:
-                    newPosition.Y = Position.Y + GameConstants.SNAKE_SIZE;
+                    newPositionY += GameConstants.SNAKE_SIZE;
                     break;
                 case MoveTypes.Right:
-                    newPosition.X = Position.X - GameConstants.SNAKE_SIZE;
+                    newPositionX -= GameConstants.SNAKE_SIZE;
                     break;
                 case MoveTypes.Down:
-                    newPosition.Y = Position.Y - GameConstants.SNAKE_SIZE;
+                    newPositionY -= GameConstants.SNAKE_SIZE;
                     break;
                 case MoveTypes.Left:
-                    newPosition.X = Position.X + GameConstants.SNAKE_SIZE;
+                    newPositionX += GameConstants.SNAKE_SIZE;
                     break;
             }
-            BodyParts.Add(new BodyPart(newPosition.X, newPosition.Y));
+            BodyParts.Add(new BodyPart(newPositionX, newPositionY));
         }
     }
 }
