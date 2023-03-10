@@ -19,11 +19,12 @@ namespace SnakeGame.GameEntities
 
         public bool IsRotten => Lifespan <= 0;
 
-        public Fruit() { 
-            Lifespan = RandomNumberGenerator.Next(1000, 5000);
+        public Fruit()
+        {
+            Lifespan = RandomNumberGenerator.Next(5000, 10000) * 100;
             Points = RandomNumberGenerator.Next(5, 25);
             Type = (FruitTypes)RandomNumberGenerator.Next(0, 4);
-            Position = new Coordinates(RandomNumberGenerator.Next(0,50) * 10, RandomNumberGenerator.Next(0, 50) * 10);
+            Position = new Coordinates(RandomNumberGenerator.Next(0, 50) * 10, RandomNumberGenerator.Next(0, 50) * 10);
         }
 
         public void Update(GameTime gameTime)

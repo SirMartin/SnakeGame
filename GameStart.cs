@@ -14,6 +14,8 @@ namespace SnakeGame
 
         private Fruit _theFruit;
 
+        private int _totalPoints;
+
         public GameStart()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -33,7 +35,9 @@ namespace SnakeGame
 
             _theSnake = new Snake(Services);
 
-            _theFruit = null;
+            _theFruit = new Fruit();
+
+            _totalPoints = 0;
 
             base.Initialize();
         }
@@ -45,7 +49,8 @@ namespace SnakeGame
             // TODO: use this.Content to load your game content here
         }
 
-        int elapsedTime = 0;
+        int movementElapsedTime = 0;
+        int fruitElapsedTime = 0;
 
         protected override void Update(GameTime gameTime)
         {
@@ -57,21 +62,82 @@ namespace SnakeGame
                 // Check for restart option.
                 if (Keyboard.GetState().IsKeyDown(Keys.R))
                 {
-                    _theSnake.RestartGame();
+                    RestartGame();
                 }
                 return;
             }
 
-            // Check if we need to make update or not.
-            elapsedTime += gameTime.ElapsedGameTime.Milliseconds;
-            if (elapsedTime < 200)
-                return;
+            if (_theSnake.IsMoving())
+            {
+                GenerateFruits(gameTime);
+                _theFruit?.Update(gameTime);
+            }
 
-            elapsedTime = 0;
+            UpdateSnake(gameTime);
 
-            _theSnake.Update(Keyboard.GetState());
+            CheckSnakeEatFruit();
 
             base.Update(gameTime);
+        }
+
+        private void RestartGame()
+        {
+            _totalPoints = 0;
+            movementElapsedTime = 0;
+            fruitElapsedTime = 0;
+            _theSnake.RestartGame();
+        }
+
+        private void CheckSnakeEatFruit()
+        {
+            if (_theFruit != null && _theSnake.Position.X == _theFruit.Position.X && _theSnake.Position.Y == _theFruit.Position.Y)
+            {
+                _totalPoints += _theFruit.Points;
+                _theFruit.Eat();
+                _theSnake.Grow();
+            }
+        }
+
+        private void GenerateFruits(GameTime gameTime)
+        {
+            if (_theFruit != null)
+            {
+                if (_theFruit.IsRotten || _theFruit.IsDiggested)
+                {
+                    _theFruit = null;
+                }
+            }
+
+            fruitElapsedTime += gameTime.ElapsedGameTime.Milliseconds;
+            if (fruitElapsedTime < GameConstants.GENERATE_FRUIT_TIME)
+                return;
+
+            fruitElapsedTime = 0;
+
+            if (_theFruit == null)
+                _theFruit = new Fruit();            
+        }
+
+        private void UpdateSnake(GameTime gameTime)
+        {
+            _theSnake.UpdateDirection(Keyboard.GetState());
+
+            // Check if we need to make update or not.
+            movementElapsedTime += gameTime.ElapsedGameTime.Milliseconds;
+            if (movementElapsedTime < GameConstants.MOVEMENT_TIME)
+                return;
+
+            movementElapsedTime = 0;
+
+            _theSnake.Update();
+        }
+
+        private void DrawPoints()
+        {
+            var font = Content.Load<SpriteFont>("Fonts/Arial24");
+            // Show Snake Coordinates
+            var text = _totalPoints.ToString();
+            _spriteBatch.DrawString(font, text, new Vector2(0, 0), Color.Green);
         }
 
         protected override void Draw(GameTime gameTime)
@@ -90,6 +156,10 @@ namespace SnakeGame
             }
 
             _theSnake.Draw(_graphics.GraphicsDevice, _spriteBatch);
+
+            _theFruit?.Draw(_graphics.GraphicsDevice, _spriteBatch);
+
+            DrawPoints();
 
             // End the sprite batch.
             _spriteBatch.End();

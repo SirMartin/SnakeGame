@@ -16,5 +16,9 @@
         /// </summary>
         public const int WINDOW_WIDTH = 500;
         public const int WINDOW_HEIGHT = 500;
+
+        public const int MOVEMENT_TIME = 200;
+
+        public const int GENERATE_FRUIT_TIME = 1000;
     }
 }

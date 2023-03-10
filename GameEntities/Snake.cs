@@ -6,6 +6,7 @@ using SnakeGame.Entities;
 using SnakeGame.Enums;
 using System;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 
 namespace SnakeGame.GameEntities
 {
@@ -37,10 +38,8 @@ namespace SnakeGame.GameEntities
             Direction = MoveTypes.Pause;
         }
 
-        public void Update(KeyboardState keyboard)
+        public void Update()
         {
-            UpdateDirection(keyboard);
-
             if (Direction != MoveTypes.Pause)
             {
                 // Update body parts.
@@ -83,7 +82,7 @@ namespace SnakeGame.GameEntities
             return Direction != MoveTypes.Pause;
         }
 
-        private void UpdateDirection(KeyboardState keyboard)
+        internal void UpdateDirection(KeyboardState keyboard)
         {
             if (keyboard.IsKeyDown(Keys.Up))
             {
@@ -134,11 +133,6 @@ namespace SnakeGame.GameEntities
             DrawHead(graphicsDevice, spriteBatch);
 
             DrawBody(graphicsDevice, spriteBatch);
-
-            var font = Content.Load<SpriteFont>("Fonts/Arial24");
-            // Show Game Over.
-            var text = $"{Position.X} {Position.Y}";
-            spriteBatch.DrawString(font, text, new Vector2(0, 0), Color.Green);
         }
 
         private void DrawHead(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
@@ -165,5 +159,25 @@ namespace SnakeGame.GameEntities
             }
         }
 
+        internal void Grow()
+        {
+            var newPosition = new Coordinates(Position.X, Position.Y);
+            switch (Direction)
+            {
+                case MoveTypes.Up:
+                    newPosition.Y = Position.Y + GameConstants.SNAKE_SIZE;
+                    break;
+                case MoveTypes.Right:
+                    newPosition.X = Position.X - GameConstants.SNAKE_SIZE;
+                    break;
+                case MoveTypes.Down:
+                    newPosition.Y = Position.Y - GameConstants.SNAKE_SIZE;
+                    break;
+                case MoveTypes.Left:
+                    newPosition.X = Position.X + GameConstants.SNAKE_SIZE;
+                    break;
+            }
+            BodyParts.Add(new BodyPart(newPosition.X, newPosition.Y));
+        }
     }
 }
