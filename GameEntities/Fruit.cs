@@ -54,8 +54,8 @@ namespace SnakeGame.GameEntities
 
         private void SetDrawRectangle()
         {
-            var spritedScaledWith = sprite.Width / GameConstants.SNAKE_SIZE;
-            var spriteScaledHeight = sprite.Height / GameConstants.SNAKE_SIZE;
+            float spritedScaledWith = sprite.Width / GameConstants.SNAKE_SIZE;
+            float spriteScaledHeight = sprite.Height / GameConstants.SNAKE_SIZE;
             var x = Position.X;
             var y = Position.Y;
             drawRectangle = new Rectangle((int)(x - spritedScaledWith / 2), (int)(y - spriteScaledHeight / 2), (int)spritedScaledWith, (int)spriteScaledHeight);
