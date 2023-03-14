@@ -33,6 +33,11 @@ namespace SnakeGame.GameEntities
             BodyParts = new List<BodyPart>();
         }
 
+        public Rectangle GetCollisionRectangle()
+        {
+            return new Rectangle(Position.X, Position.Y, GameConstants.SNAKE_SIZE, GameConstants.SNAKE_SIZE);
+        }
+
         internal void RestartGame()
         {
             Position = new Coordinates(GameConstants.SNAKE_START_POSITION_X, GameConstants.SNAKE_START_POSITION_Y);

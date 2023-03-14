@@ -102,7 +102,8 @@ namespace SnakeGame
 
         private void CheckSnakeEatFruit()
         {
-            if (_theFruit != null && _theSnake.Position.X == _theFruit.Position.X && _theSnake.Position.Y == _theFruit.Position.Y)
+            //if (_theFruit != null && _theSnake.Position.X == _theFruit.Position.X && _theSnake.Position.Y == _theFruit.Position.Y)
+            if (_theFruit != null && _theSnake.GetCollisionRectangle().Intersects(_theFruit.GetCollisionRectangle()))
             {
                 IncreaseDifficulty();
                 _totalPoints += _theFruit.Points;

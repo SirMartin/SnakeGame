@@ -27,6 +27,11 @@ namespace SnakeGame.GameEntities
         }
         ContentManager _content;
 
+        public Rectangle GetCollisionRectangle()
+        {
+            return drawRectangle;
+        }
+
         private Texture2D sprite;
         private Rectangle drawRectangle;
         private Rectangle sourceRectangle;
