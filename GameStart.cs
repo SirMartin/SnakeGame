@@ -16,6 +16,10 @@ namespace SnakeGame
 
         private int _totalPoints;
 
+        private int _fruitConsumedCount;
+
+        private int _actualSpeed;
+
         public GameStart()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -25,6 +29,9 @@ namespace SnakeGame
             _graphics.PreferredBackBufferWidth = GameConstants.WINDOW_WIDTH;
             _graphics.PreferredBackBufferHeight = GameConstants.WINDOW_HEIGHT;
             _graphics.GraphicsProfile = GraphicsProfile.HiDef;
+
+            // Set initial movement speed.
+            _actualSpeed = GameConstants.INITIAL_MOVEMENT_TIME;
 
             IsMouseVisible = false;
         }
@@ -92,9 +99,23 @@ namespace SnakeGame
         {
             if (_theFruit != null && _theSnake.Position.X == _theFruit.Position.X && _theSnake.Position.Y == _theFruit.Position.Y)
             {
+                IncreaseDifficulty();
                 _totalPoints += _theFruit.Points;
                 _theFruit.Eat();
                 _theSnake.Grow();
+            }
+        }
+
+        private void IncreaseDifficulty()
+        {
+            _fruitConsumedCount++;
+            if (_fruitConsumedCount == GameConstants.AMOUNT_FRUITS_TO_MODIFY_MOVEMENT_SPEED)
+            {
+                _fruitConsumedCount = 0;
+                if (_actualSpeed > GameConstants.LOWEST_MOVEMENT_TIME)
+                {
+                    _actualSpeed -= GameConstants.MOVEMENT_TIME_MODIFIER;
+                }
             }
         }
 
@@ -115,7 +136,7 @@ namespace SnakeGame
             fruitElapsedTime = 0;
 
             if (_theFruit == null)
-                _theFruit = new Fruit();            
+                _theFruit = new Fruit();
         }
 
         private void UpdateSnake(GameTime gameTime)
@@ -124,7 +145,7 @@ namespace SnakeGame
 
             // Check if we need to make update or not.
             movementElapsedTime += gameTime.ElapsedGameTime.Milliseconds;
-            if (movementElapsedTime < GameConstants.MOVEMENT_TIME)
+            if (movementElapsedTime < _actualSpeed)
                 return;
 
             movementElapsedTime = 0;
@@ -136,7 +157,8 @@ namespace SnakeGame
         {
             var font = Content.Load<SpriteFont>("Fonts/Arial24");
             // Show Snake Coordinates
-            var text = _totalPoints.ToString();
+            //var text = _totalPoints.ToString();
+            var text = $"{_totalPoints} - {_actualSpeed}";
             _spriteBatch.DrawString(font, text, new Vector2(0, 0), Color.Green);
         }
 
