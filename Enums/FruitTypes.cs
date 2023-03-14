@@ -3,9 +3,11 @@
     public enum FruitTypes
     {
         Banana = 0,
-        Apple = 1,
+        Kiwi = 1,
         Pear = 2,
-        Watermelon = 3,
-        Grape = 4
+        Pineapple= 3,
+        Plum = 4,
+        Strawberry = 5,
+        Watermelon = 6
     }
 }

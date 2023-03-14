@@ -42,11 +42,16 @@ namespace SnakeGame
 
             _theSnake = new Snake(Services);
 
-            _theFruit = new Fruit();
+            GenerateNewFruit();
 
             _totalPoints = 0;
 
             base.Initialize();
+        }
+
+        private void GenerateNewFruit()
+        {
+            _theFruit = new Fruit(Services);
         }
 
         protected override void LoadContent()
@@ -136,7 +141,7 @@ namespace SnakeGame
             fruitElapsedTime = 0;
 
             if (_theFruit == null)
-                _theFruit = new Fruit();
+                GenerateNewFruit();
         }
 
         private void UpdateSnake(GameTime gameTime)
